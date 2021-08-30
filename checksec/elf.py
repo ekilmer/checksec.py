@@ -149,7 +149,8 @@ class ELFSecurity(BinarySecurity):
 
     @property
     def pie(self) -> PIEType:
-        if self.bin.is_pie:
+        # NOTE: All dynamic ELFs are position-independent by definition
+        if self.bin.header.file_type == lief.ELF.E_TYPE.DYNAMIC or self.bin.is_pie:
             if self.bin.has(lief.ELF.DYNAMIC_TAGS.DEBUG):
                 return PIEType.PIE
             else:
